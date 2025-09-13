@@ -1,0 +1,94 @@
+import QtQuick
+import QtQuick.Effects
+import QtQuick.Controls
+
+Item {
+    id: root
+
+    enum State {
+        Checked,
+        Indeterminat,
+        Unchecked
+    }
+
+    property int state: M3Checkbox.State.Indeterminat
+    property bool error: false
+
+    property string icon: {
+        switch (state) {
+            case M3Checkbox.State.Checked: return "\ue5ca"
+            case M3Checkbox.State.Indeterminat: return "\uf88a"
+            default: return ""
+        }
+    }
+
+    FontLoader { id: materialSymbols; source: "/nix/store/qqdjqvd9lvnnyv9c1i7dxjpibggsj74j-material-symbols-4.0.0-unstable-2024-05-17/share/fonts/TTF/MaterialSymbolsOutlined.ttf" }
+
+    implicitWidth: M3Size.dp(48)
+    implicitHeight: M3Size.dp(48)
+
+    Rectangle {
+        id: stateLayer
+
+        anchors.centerIn: parent
+        implicitWidth: M3Size.dp(40)
+        implicitHeight: M3Size.dp(40)
+        radius: M3Size.dp("full")
+        opacity: 0
+
+        color: {
+            switch (root.state) {
+                case M3Checkbox.State.Checked:
+                case M3Checkbox.State.Indeterminat:
+                return root.error ? M3Colors.error : M3Colors.primary
+
+                case M3Checkbox.State.Unchecked:
+                default:
+                return M3Colors.whileOnSurface
+            }
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            onEntered: {
+                stateLayer.opacity = 0.08
+            }
+            onExited: {
+                stateLayer.opacity = 0
+            }
+            onClicked: {
+                if (root.state == M3Checkbox.State.Unchecked) {
+                    root.state = M3Checkbox.State.Checked
+                } else {
+                    root.state = M3Checkbox.State.Unchecked
+                }
+            }
+        }
+    }
+
+    Rectangle {
+        id: background
+
+        anchors.centerIn: parent
+        implicitWidth: M3Size.dp(18)
+        implicitHeight: M3Size.dp(18)
+
+        color: root.state == M3Checkbox.State.Unchecked ? "transparent" : (root.error ? M3Colors.error : M3Colors.primary)
+
+        radius: M3Size.dp(2)
+        border.width: M3Size.dp(2)
+        border.color: root.error ? M3Colors.error : (root.state == M3Checkbox.State.Unchecked ? M3Colors.whileOnSurface : M3Colors.primary)
+
+        Text {
+            id: icon
+
+            visible: root.state == M3Checkbox.State.Unchecked ? false : true
+            text: root.icon
+            anchors.centerIn: parent
+            color: root.error ? M3Colors.whileOnError : M3Colors.whileOnPrimary
+            font.family: materialSymbols.name
+            font.pixelSize: M3Size.dp(18)
+        }
+    }
+}
