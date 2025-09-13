@@ -50,7 +50,6 @@ Singleton {
 
         blockLoading: true
         Component.onCompleted: {
-            console.log(file.text());
             a = JSON.parse(file.text());
         }
 

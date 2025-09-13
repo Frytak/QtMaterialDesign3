@@ -18,7 +18,7 @@ Item {
         Square
     }
 
-    enum Type {
+    enum Style {
         Elevated,
         Filled,
         Tonal,
@@ -26,24 +26,13 @@ Item {
         Text
     }
 
-    enum ColorType {
-        Default,
-        ToggleUnselected,
-        ToggleSelected
-    }
-
     function typeToName(color) {
         switch (color) {
-        case M3Button.Type.Elevated:
-            return "elevated";
-        case M3Button.Type.Filled:
-            return "filled";
-        case M3Button.Type.Tonal:
-            return "tonal";
-        case M3Button.Type.Outlined:
-            return "outlined";
-        case M3Button.Type.Text:
-            return "text";
+            case M3Button.Style.Elevated: return "elevated";
+            case M3Button.Style.Filled: return "filled";
+            case M3Button.Style.Tonal: return "tonal";
+            case M3Button.Style.Outlined: return "outlined";
+            case M3Button.Style.Text: return "text";
         }
     }
 
@@ -82,13 +71,20 @@ Item {
         }
     }
 
-    property int type: M3Button.Type.Filled
+    property int type: M3Button.Style.Filled
     property int size: M3Button.Size.Medium
     property int shape: M3Button.Shape.Round
     property alias text: label.text
-    property bool enabled: true
+    signal clicked()
 
-    // Centralized style configuration
+    implicitWidth: background.implicitWidth
+    implicitHeight: background.implicitHeight
+
+    property double radius: shape == M3Button.Shape.Round ? M3Size.dp("full") : M3Size.dp(12)
+    property color backgroundColor: type == M3Button.Style.Outlined || type == M3Button.Style.Text ? "transparent" : (() => { return root.styleConfig[root.typeToName(type)].container })()
+    property double borderWidth: type == M3Button.Style.Outlined ? M3Size.dp(1) : 0
+    property color borderColor: type == M3Button.Style.Outlined ? (() => { return root.styleConfig[root.typeToName(type)].container })() : "transparent"
+
     readonly property var styleConfig: ({
             "elevated": {
                 container: M3Colors.getColor("surfaceContainerLow"),
@@ -111,24 +107,19 @@ Item {
             }
         })
 
-    implicitWidth: background.implicitWidth
-    implicitHeight: background.implicitHeight
-
     Elevation {
-        level: root.type == M3Button.Type.Elevated ? Elevation.Level.One : Elevation.Level.Zero
+        level: root.type == M3Button.Style.Elevated ? Elevation.Level.One : Elevation.Level.Zero
 
         Rectangle {
             id: background
-            radius: shape == M3Button.Shape.Round ? M3Size.dp("full") : M3Size.dp(12)
+            radius: root.radius
             implicitWidth: label.implicitWidth + (sizeToPixels(size).padding * 2)
             implicitHeight: sizeToPixels(size).height
 
-            // Apply style properties
-            color: (() => {
-                    return root.styleConfig[root.typeToName(type)].container;
-                })()
+            color: root.backgroundColor
+            border.width: root.borderWidth
+            border.color: root.borderColor
 
-            // Button text
             Text {
                 id: label
                 anchors.centerIn: background
@@ -140,18 +131,11 @@ Item {
                     })()
             }
 
-            // Mouse interaction
             MouseArea {
                 id: mouseArea
                 anchors.fill: parent
                 hoverEnabled: true
-                onClicked: {
-                    if (M3Colors.theme == M3Colors.Theme.Dark) {
-                        M3Colors.setTheme(M3Colors.Theme.Light);
-                    } else {
-                        M3Colors.setTheme(M3Colors.Theme.Dark);
-                    }
-                }
+                onClicked: root.clicked()
             }
         }
     }
