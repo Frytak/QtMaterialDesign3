@@ -181,7 +181,8 @@ def print_dynamic_scheme_as_json(scheme_class):
         for i in range(contrasts):
             out[name_color][0][i] = rgba_to_hex(__.get_hct(schemes[0][i]).to_rgba())[:-2]
             out[name_color][1][i] = rgba_to_hex(__.get_hct(schemes[1][i]).to_rgba())[:-2]
-    print(out)
+    import json
+    print(json.dumps(out, separators=(',', ':')))
 
 print_dynamic_scheme_as_json(SchemeTonalSpot)
 # print_dynamic_scheme_as_qml(SchemeTonalSpot)
