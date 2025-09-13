@@ -40,11 +40,11 @@ Item {
             switch (root.state) {
                 case M3Checkbox.State.Checked:
                 case M3Checkbox.State.Indeterminat:
-                return root.error ? M3Colors.error : M3Colors.primary
+                return root.error ? M3Colors.getColor("error") : M3Colors.getColor("primary")
 
                 case M3Checkbox.State.Unchecked:
                 default:
-                return M3Colors.whileOnSurface
+                return M3Colors.getColor("onSurface")
             }
         }
 
@@ -74,11 +74,11 @@ Item {
         implicitWidth: M3Size.dp(18)
         implicitHeight: M3Size.dp(18)
 
-        color: root.state == M3Checkbox.State.Unchecked ? "transparent" : (root.error ? M3Colors.error : M3Colors.primary)
+        color: root.state == M3Checkbox.State.Unchecked ? "transparent" : (root.error ? M3Colors.getColor("error") : M3Colors.getColor("primary"))
 
         radius: M3Size.dp(2)
         border.width: M3Size.dp(2)
-        border.color: root.error ? M3Colors.error : (root.state == M3Checkbox.State.Unchecked ? M3Colors.whileOnSurface : M3Colors.primary)
+        border.color: root.error ? M3Colors.getColor("error") : (root.state == M3Checkbox.State.Unchecked ? M3Colors.getColor("onSurface") : M3Colors.getColor("primary"))
 
         Text {
             id: icon
@@ -86,7 +86,7 @@ Item {
             visible: root.state == M3Checkbox.State.Unchecked ? false : true
             text: root.icon
             anchors.centerIn: parent
-            color: root.error ? M3Colors.whileOnError : M3Colors.whileOnPrimary
+            color: root.error ? M3Colors.getColor("onError") : M3Colors.getColor("onPrimary")
             font.family: materialSymbols.name
             font.pixelSize: M3Size.dp(18)
         }

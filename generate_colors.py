@@ -41,7 +41,7 @@ image_data = image.getdata()
 # start = default_timer()
 colors = QuantizeCelebi([image_data[i] for i in range(0, pixel_len, quality)], MAX_COLOR)
 end = default_timer()
-print(f"Color[pillow] generation took {end-start:.4f} secs")
+# print(f"Color[pillow] generation took {end-start:.4f} secs")
 ##############################
 
 ########## C++ Method ##########
@@ -49,7 +49,7 @@ start = default_timer()
 # loading using c++ method
 colors = ImageQuantizeCelebi(sys.argv[1], quality, MAX_COLOR)
 end = default_timer()
-print(f"Color[stb_image] generation took {end-start:.4f} secs")
+# print(f"Color[stb_image] generation took {end-start:.4f} secs")
 ######################
 
 selected = Score.score(colors)
@@ -58,31 +58,31 @@ if os.name == "nt":
     # UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-5: character maps to <undefined>
     exit(0)
 
-print("All dominant colors ({}) :\n".format(MAX_COLOR))
+# print("All dominant colors ({}) :\n".format(MAX_COLOR))
 pused_colors = 0
 
-for color in colors.keys():
-    rgb = rgba_from_argb(color)[:-1]
-    print("\x1b[48;2;{};{};{}m    \x1b[0m".format(*rgb), end="")
-    pused_colors += 1
-    if pused_colors % 16 == 0:
-        print()
-print()
+# for color in colors.keys():
+#     rgb = rgba_from_argb(color)[:-1]
+#     print("\x1b[48;2;{};{};{}m    \x1b[0m".format(*rgb), end="")
+#     pused_colors += 1
+#     if pused_colors % 16 == 0:
+#         print()
+# print()
 
-st = Table(title="Selected colors", title_justify="left")
-st.add_column("Color")
-st.add_column("RGB")
-st.add_column("Occurance")
+# st = Table(title="Selected colors", title_justify="left")
+# st.add_column("Color")
+# st.add_column("RGB")
+# st.add_column("Occurance")
 
-for color in selected:
-    rgb = rgba_from_argb(color)
-    __ = rgba_to_hex(rgb)[:-2]
-    st.add_row(
-        "[{}]██████[/{}]".format(__, __),
-        str(rgb[:-1]),
-        str(colors[color]),
-    )
-console.print(st)
+# for color in selected:
+#     rgb = rgba_from_argb(color)
+#     __ = rgba_to_hex(rgb)[:-2]
+#     st.add_row(
+#         "[{}]██████[/{}]".format(__, __),
+#         str(rgb[:-1]),
+#         str(colors[color]),
+#     )
+# console.print(st)
 
 #def print_scheme(scheme_function, name):
 #    print()
@@ -157,5 +157,31 @@ property M3Color _{}: M3Color {{
             color = "whileOn" + color[2:]
         print("{} = Qt.binding(() => getColor(_{}))".format(color, color))
 
+def print_dynamic_scheme_as_json(scheme_class):
+    color = rgba_to_hex(rgba_from_argb(selected[0]))[:-2]
+    schemes = []
+    contrasts = 3
+    for i in range(2):
+        scheme = []
+        for j in range(contrasts):
+            scheme.append(scheme_class(Hct.from_int(selected[0]),bool(i),j*0.5))
+        schemes.append(scheme)
 
-print_dynamic_scheme_as_qml(SchemeTonalSpot)
+    out = {}
+    
+    for color in vars(MaterialDynamicColors).keys():
+        name_color = color
+        __ = getattr(MaterialDynamicColors, color)
+        if not hasattr(__, "get_hct"):
+            continue
+        out[name_color] = [
+            [None] * contrasts,
+            [None] * contrasts
+        ]
+        for i in range(contrasts):
+            out[name_color][0][i] = rgba_to_hex(__.get_hct(schemes[0][i]).to_rgba())[:-2]
+            out[name_color][1][i] = rgba_to_hex(__.get_hct(schemes[1][i]).to_rgba())[:-2]
+    print(out)
+
+print_dynamic_scheme_as_json(SchemeTonalSpot)
+# print_dynamic_scheme_as_qml(SchemeTonalSpot)

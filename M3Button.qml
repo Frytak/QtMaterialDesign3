@@ -38,11 +38,36 @@ Item {
 
     function sizeToPixels(size) {
         switch (size) {
-            case M3Button.Size.ExtraSmall: return { padding: M3Size.dp(12), height: M3Size.dp(32), fontSize: M3Size.pt(14) }
-            case M3Button.Size.Small: return { padding: M3Size.dp(16), height: M3Size.dp(40), fontSize: M3Size.pt(14) }
-            case M3Button.Size.Medium: return { padding: M3Size.dp(24), height: M3Size.dp(56), fontSize: M3Size.pt(16) }
-            case M3Button.Size.Large: return { padding: M3Size.dp(48), height: M3Size.dp(96), fontSize: M3Size.pt(24) }
-            case M3Button.Size.ExtraLarge: return { padding: M3Size.dp(64), height: M3Size.dp(136), fontSize: M3Size.pt(32) }
+        case M3Button.Size.ExtraSmall:
+            return {
+                padding: M3Size.dp(12),
+                height: M3Size.dp(32),
+                fontSize: M3Size.pt(14)
+            };
+        case M3Button.Size.Small:
+            return {
+                padding: M3Size.dp(16),
+                height: M3Size.dp(40),
+                fontSize: M3Size.pt(14)
+            };
+        case M3Button.Size.Medium:
+            return {
+                padding: M3Size.dp(24),
+                height: M3Size.dp(56),
+                fontSize: M3Size.pt(16)
+            };
+        case M3Button.Size.Large:
+            return {
+                padding: M3Size.dp(48),
+                height: M3Size.dp(96),
+                fontSize: M3Size.pt(24)
+            };
+        case M3Button.Size.ExtraLarge:
+            return {
+                padding: M3Size.dp(64),
+                height: M3Size.dp(136),
+                fontSize: M3Size.pt(32)
+            };
         }
     }
 
@@ -50,6 +75,7 @@ Item {
     property int size: M3Button.Size.Medium
     property int shape: M3Button.Shape.Round
     property alias text: label.text
+    signal clicked()
 
     implicitWidth: background.implicitWidth
     implicitHeight: background.implicitHeight
@@ -60,26 +86,26 @@ Item {
     property color borderColor: type == M3Button.Style.Outlined ? (() => { return root.styleConfig[root.typeToName(type)].container })() : "transparent"
 
     readonly property var styleConfig: ({
-        "elevated": {
-            container: M3Colors.surfaceContainerLow,
-            icon_and_label: M3Colors.primary
-        },
-        "filled": {
-            container: M3Colors.primary,
-            icon_and_label: M3Colors.whileOnPrimary
-        },
-        "tonal": {
-            container: M3Colors.secondaryContainer,
-            icon_and_label: M3Colors.whileOnSecondaryContainer
-        },
-        "outlined": {
-            container: M3Colors.outlineVariant,
-            icon_and_label: M3Colors.whileOnSurfaceVariant
-        },
-        "text": {
-            icon_and_label: M3Colors.primary
-        }
-    })
+            "elevated": {
+                container: M3Colors.getColor("surfaceContainerLow"),
+                icon_and_label: M3Colors.getColor("primary")
+            },
+            "filled": {
+                container: M3Colors.getColor("primary"),
+                icon_and_label: M3Colors.getColor("onPrimary")
+            },
+            "tonal": {
+                container: M3Colors.getColor("secondaryContainer"),
+                icon_and_label: M3Colors.getColor("onSecondaryContainer")
+            },
+            "outlined": {
+                container: M3Colors.getColor("outlineVariant"),
+                icon_and_label: M3Colors.getColor("onSurfaceVariant")
+            },
+            "text": {
+                icon_and_label: M3Colors.getColor("primary")
+            }
+        })
 
     Elevation {
         level: root.type == M3Button.Style.Elevated ? Elevation.Level.One : Elevation.Level.Zero
@@ -100,20 +126,16 @@ Item {
                 font.family: "Roboto"
                 font.weight: Font.Medium
                 font.pixelSize: sizeToPixels(size).fontSize
-                color: (() => { return root.styleConfig[root.typeToName(type)].icon_and_label })()
+                color: (() => {
+                        return root.styleConfig[root.typeToName(type)].icon_and_label;
+                    })()
             }
 
             MouseArea {
                 id: mouseArea
                 anchors.fill: parent
                 hoverEnabled: true
-                onClicked: {
-                    if (M3Colors.theme == M3Colors.Theme.Dark) {
-                        M3Colors.setTheme(M3Colors.Theme.Light)
-                    } else {
-                        M3Colors.setTheme(M3Colors.Theme.Dark)
-                    }
-                }
+                onClicked: root.clicked()
             }
         }
     }
