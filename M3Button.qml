@@ -34,21 +34,51 @@ Item {
 
     function typeToName(color) {
         switch (color) {
-            case M3Button.Type.Elevated: return "elevated";
-            case M3Button.Type.Filled: return "filled";
-            case M3Button.Type.Tonal: return "tonal";
-            case M3Button.Type.Outlined: return "outlined";
-            case M3Button.Type.Text: return "text";
+        case M3Button.Type.Elevated:
+            return "elevated";
+        case M3Button.Type.Filled:
+            return "filled";
+        case M3Button.Type.Tonal:
+            return "tonal";
+        case M3Button.Type.Outlined:
+            return "outlined";
+        case M3Button.Type.Text:
+            return "text";
         }
     }
 
     function sizeToPixels(size) {
         switch (size) {
-            case M3Button.Size.ExtraSmall: return { padding: M3Size.dp(12), height: M3Size.dp(32), fontSize: M3Size.pt(14) }
-            case M3Button.Size.Small: return { padding: M3Size.dp(16), height: M3Size.dp(40), fontSize: M3Size.pt(14) }
-            case M3Button.Size.Medium: return { padding: M3Size.dp(24), height: M3Size.dp(56), fontSize: M3Size.pt(16) }
-            case M3Button.Size.Large: return { padding: M3Size.dp(48), height: M3Size.dp(96), fontSize: M3Size.pt(24) }
-            case M3Button.Size.ExtraLarge: return { padding: M3Size.dp(64), height: M3Size.dp(136), fontSize: M3Size.pt(32) }
+        case M3Button.Size.ExtraSmall:
+            return {
+                padding: M3Size.dp(12),
+                height: M3Size.dp(32),
+                fontSize: M3Size.pt(14)
+            };
+        case M3Button.Size.Small:
+            return {
+                padding: M3Size.dp(16),
+                height: M3Size.dp(40),
+                fontSize: M3Size.pt(14)
+            };
+        case M3Button.Size.Medium:
+            return {
+                padding: M3Size.dp(24),
+                height: M3Size.dp(56),
+                fontSize: M3Size.pt(16)
+            };
+        case M3Button.Size.Large:
+            return {
+                padding: M3Size.dp(48),
+                height: M3Size.dp(96),
+                fontSize: M3Size.pt(24)
+            };
+        case M3Button.Size.ExtraLarge:
+            return {
+                padding: M3Size.dp(64),
+                height: M3Size.dp(136),
+                fontSize: M3Size.pt(32)
+            };
         }
     }
 
@@ -60,26 +90,26 @@ Item {
 
     // Centralized style configuration
     readonly property var styleConfig: ({
-        "elevated": {
-            container: M3Colors.surfaceContainerLow,
-            icon_and_label: M3Colors.primary
-        },
-        "filled": {
-            container: M3Colors.primary,
-            icon_and_label: M3Colors.whileOnPrimary
-        },
-        "tonal": {
-            container: M3Colors.secondaryContainer,
-            icon_and_label: M3Colors.whileOnSecondaryContainer
-        },
-        "outlined": {
-            container: M3Colors.outlineVariant,
-            icon_and_label: M3Colors.whileOnSurfaceVariant
-        },
-        "text": {
-            icon_and_label: M3Colors.primary
-        }
-    })
+            "elevated": {
+                container: M3Colors.getColor("surfaceContainerLow"),
+                icon_and_label: M3Colors.getColor("primary")
+            },
+            "filled": {
+                container: M3Colors.getColor("primary"),
+                icon_and_label: M3Colors.getColor("onPrimary")
+            },
+            "tonal": {
+                container: M3Colors.getColor("secondaryContainer"),
+                icon_and_label: M3Colors.getColor("onSecondaryContainer")
+            },
+            "outlined": {
+                container: M3Colors.getColor("outlineVariant"),
+                icon_and_label: M3Colors.getColor("onSurfaceVariant")
+            },
+            "text": {
+                icon_and_label: M3Colors.getColor("primary")
+            }
+        })
 
     implicitWidth: background.implicitWidth
     implicitHeight: background.implicitHeight
@@ -94,7 +124,9 @@ Item {
             implicitHeight: sizeToPixels(size).height
 
             // Apply style properties
-            color: (() => { return root.styleConfig[root.typeToName(type)].container })()
+            color: (() => {
+                    return root.styleConfig[root.typeToName(type)].container;
+                })()
 
             // Button text
             Text {
@@ -103,7 +135,9 @@ Item {
                 font.family: "Roboto"
                 font.weight: Font.Medium
                 font.pixelSize: sizeToPixels(size).fontSize
-                color: (() => { return root.styleConfig[root.typeToName(type)].icon_and_label })()
+                color: (() => {
+                        return root.styleConfig[root.typeToName(type)].icon_and_label;
+                    })()
             }
 
             // Mouse interaction
@@ -113,9 +147,9 @@ Item {
                 hoverEnabled: true
                 onClicked: {
                     if (M3Colors.theme == M3Colors.Theme.Dark) {
-                        M3Colors.setTheme(M3Colors.Theme.Light)
+                        M3Colors.setTheme(M3Colors.Theme.Light);
                     } else {
-                        M3Colors.setTheme(M3Colors.Theme.Dark)
+                        M3Colors.setTheme(M3Colors.Theme.Dark);
                     }
                 }
             }
