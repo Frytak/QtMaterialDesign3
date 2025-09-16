@@ -89,6 +89,40 @@ Scope {
                 M3Checkbox { }
                 M3Checkbox { error: true }
             }
+            ColumnLayout {
+                Layout.alignment: Qt.AlignCenter
+                spacing: 40
+                RowLayout {
+                    Layout.alignment: Qt.AlignCenter
+
+                    Repeater {
+                        model: 5
+                        M3Slider {
+                            required property int index
+                            size: index
+                        }
+                    }
+                }
+                RowLayout {
+                    Repeater {
+                        model: 5
+                        M3RangeSlider {
+                            required property int index
+                            size: index
+                        }
+                    }
+                }
+            }
+
+            RowLayout {
+                Layout.alignment: Qt.AlignCenter
+
+                M3Switch {
+                    onCheckedChanged: {
+                        M3Colors.setTheme(M3Colors.theme == 0 ? 1 : 0);
+                    }
+                }
+            }
 
             RowLayout {
                 Layout.alignment: Qt.AlignCenter
@@ -115,35 +149,45 @@ Scope {
                 Layout.fillHeight: true
             }
 
-            M3Button {
-                text: "Generate new theme"
-                type: M3Button.Style.Tonal
-
+            ColumnLayout {
                 Layout.alignment: Qt.AlignCenter | Qt.AlignBottom
                 Layout.bottomMargin: 40
+                spacing: 20
 
-                onClicked: {
-                    process.running = true;
-                    console.log("a");
-                }
+                M3Button {
+                    Layout.alignment: Qt.AlignCenter
+                    text: "Generate new theme"
+                    type: M3Button.Style.Tonal
 
-                Process {
-                    id: process
-                    command: [`python`, `./generate_colors.py`, `/etc/nixos/wallpapers/skeleton_army_1920x1080.png`, `100`]
-                    running: false
-                    workingDirectory: Quickshell.shellDir
-                    onRunningChanged: {
-                        console.log("run");
-                    }
-                    stdout: StdioCollector {
-                        onStreamFinished: {
-                            M3Colors.a = JSON.parse(this.text);
-                            console.log(`line read: ${this.text}`);
+                    onClicked: {
+                        if (specifiedWallpaper.text == "") {
+                            currentWallpaper.running = true
+                        } else {
+                            console.log(specifiedWallpaper.text)
+                            M3Colors.loadColorsFromImage(specifiedWallpaper.text);
                         }
                     }
-                    stderr: StdioCollector {
-                        onStreamFinished: console.log(`line read: ${this.text}`)
+
+                    Process {
+                        id: currentWallpaper
+                        command: ["sh", "-c", "hyprctl hyprpaper listloaded"]
+                        property string wallpaper
+                        stdout: StdioCollector {
+                            onStreamFinished: currentWallpaper.wallpaper = this.text.trim()
+                        }
+                        onExited: {
+                            console.log(currentWallpaper.wallpaper)
+                            M3Colors.loadColorsFromImage(currentWallpaper.wallpaper);
+                        }
                     }
+                }
+
+                M3TextField {
+                    id: specifiedWallpaper
+                    Layout.alignment: Qt.AlignCenter
+                    implicitWidth: 400
+                    placeholderText: "Image path"
+                    supportingText: "If not specified, uses wallpaper"
                 }
             }
         }

@@ -23,10 +23,12 @@ Item {
 
     Rectangle {
         id: background
+        anchors.fill: parent
         implicitWidth: input.implicitWidth
         implicitHeight: M3Size.dp(56)
         radius: M3Size.dp(4)
         color: "transparent"
+        border.color: state == "FOCUSED" ? M3Colors.getColor("primary") : M3Colors.getColor("outline")
 
         TextField {
             id: input
@@ -68,6 +70,7 @@ Item {
             anchors.fill: parent
             anchors.leftMargin: M3Size.dp(4)
             anchors.rightMargin: M3Size.dp(4)
+            color: M3Colors.getColor("primary")
         }
     }
 

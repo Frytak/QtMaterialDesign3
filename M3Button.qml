@@ -28,11 +28,16 @@ Item {
 
     function typeToName(color) {
         switch (color) {
-            case M3Button.Style.Elevated: return "elevated";
-            case M3Button.Style.Filled: return "filled";
-            case M3Button.Style.Tonal: return "tonal";
-            case M3Button.Style.Outlined: return "outlined";
-            case M3Button.Style.Text: return "text";
+        case M3Button.Style.Elevated:
+            return "elevated";
+        case M3Button.Style.Filled:
+            return "filled";
+        case M3Button.Style.Tonal:
+            return "tonal";
+        case M3Button.Style.Outlined:
+            return "outlined";
+        case M3Button.Style.Text:
+            return "text";
         }
     }
 
@@ -75,15 +80,19 @@ Item {
     property int size: M3Button.Size.Medium
     property int shape: M3Button.Shape.Round
     property alias text: label.text
-    signal clicked()
+    signal clicked
 
     implicitWidth: background.implicitWidth
     implicitHeight: background.implicitHeight
 
     property double radius: shape == M3Button.Shape.Round ? M3Size.dp("full") : M3Size.dp(12)
-    property color backgroundColor: type == M3Button.Style.Outlined || type == M3Button.Style.Text ? "transparent" : (() => { return root.styleConfig[root.typeToName(type)].container })()
+    property color backgroundColor: type == M3Button.Style.Outlined || type == M3Button.Style.Text ? "transparent" : (() => {
+            return root.styleConfig[root.typeToName(type)].container;
+        })()
     property double borderWidth: type == M3Button.Style.Outlined ? M3Size.dp(1) : 0
-    property color borderColor: type == M3Button.Style.Outlined ? (() => { return root.styleConfig[root.typeToName(type)].container })() : "transparent"
+    property color borderColor: type == M3Button.Style.Outlined ? (() => {
+            return root.styleConfig[root.typeToName(type)].container;
+        })() : "transparent"
 
     readonly property var styleConfig: ({
             "elevated": {

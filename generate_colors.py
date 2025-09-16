@@ -26,23 +26,11 @@ from materialyoucolor.scheme.scheme_monochrome import SchemeMonochrome
 from materialyoucolor.scheme.scheme_expressive import SchemeExpressive
 from rich.console import Console
 from rich.table import Table
-from PIL import Image
 
 rgba_to_hex = lambda rgba: "#{:02X}{:02X}{:02X}{:02X}".format(*map(round, rgba))
 
 console = Console()
 quality = int(sys.argv[2])
-
-########### PILLOW METHOD #############
-start = default_timer()
-image = Image.open(sys.argv[1])
-pixel_len = image.width * image.height
-image_data = image.getdata()
-# start = default_timer()
-colors = QuantizeCelebi([image_data[i] for i in range(0, pixel_len, quality)], MAX_COLOR)
-end = default_timer()
-# print(f"Color[pillow] generation took {end-start:.4f} secs")
-##############################
 
 ########## C++ Method ##########
 start = default_timer()

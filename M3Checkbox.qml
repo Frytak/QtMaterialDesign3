@@ -16,9 +16,12 @@ Item {
 
     property string icon: {
         switch (state) {
-            case M3Checkbox.State.Checked: return "\ue5ca"
-            case M3Checkbox.State.Indeterminat: return "\uf88a"
-            default: return ""
+        case M3Checkbox.State.Checked:
+            return "\ue5ca";
+        case M3Checkbox.State.Indeterminat:
+            return "\uf88a";
+        default:
+            return "";
         }
     }
 
@@ -39,13 +42,12 @@ Item {
 
         color: {
             switch (root.state) {
-                case M3Checkbox.State.Checked:
-                case M3Checkbox.State.Indeterminat:
-                return root.error ? M3Colors.getColor("error") : M3Colors.getColor("primary")
-
-                case M3Checkbox.State.Unchecked:
-                default:
-                return M3Colors.getColor("onSurface")
+            case M3Checkbox.State.Checked:
+            case M3Checkbox.State.Indeterminat:
+                return root.error ? M3Colors.getColor("error") : M3Colors.getColor("primary");
+            case M3Checkbox.State.Unchecked:
+            default:
+                return M3Colors.getColor("onSurface");
             }
         }
 
@@ -84,7 +86,7 @@ Item {
                 if (root.state == M3Checkbox.State.Unchecked || root.state == M3Checkbox.State.Indeterminat) {
                     root.state = M3Checkbox.State.Checked
                 } else {
-                    root.state = M3Checkbox.State.Unchecked
+                    root.state = M3Checkbox.State.Unchecked;
                 }
             }
         }
