@@ -10,6 +10,7 @@ import QtQuick.Controls
 
 Scope {
     FloatingWindow {
+        id: root
         implicitWidth: 400
         implicitHeight: 400
         color: M3Colors.getColor("background")
@@ -89,11 +90,38 @@ Scope {
                 M3Checkbox { error: true }
             }
 
+            RowLayout {
+                Layout.alignment: Qt.AlignCenter
+
+                M3TextField {
+                    placeholderText: "How are you feeling?"
+                    supportingText: "I'm your support"
+                }
+
+                M3TextField {
+                    placeholderText: "How..."
+                }
+            }
+
+            RowLayout {
+                Layout.alignment: Qt.AlignCenter
+
+                M3RadioButton { }
+                M3RadioButton { }
+                M3RadioButton { }
+            }
+
             Item {
                 Layout.fillHeight: true
             }
-            Button {
-                text: "AAAAAA"
+
+            M3Button {
+                text: "Generate new theme"
+                type: M3Button.Style.Tonal
+
+                Layout.alignment: Qt.AlignCenter | Qt.AlignBottom
+                Layout.bottomMargin: 40
+
                 onClicked: {
                     process.running = true;
                     console.log("a");
@@ -101,7 +129,7 @@ Scope {
 
                 Process {
                     id: process
-                    command: [`./venv/bin/python`, `./generate_colors.py`, `/home/user/Downloads/Bloom-wallpaper-OLED.jpg`, `100`]
+                    command: [`python`, `./generate_colors.py`, `/etc/nixos/wallpapers/skeleton_army_1920x1080.png`, `100`]
                     running: false
                     workingDirectory: Quickshell.shellDir
                     onRunningChanged: {

@@ -9,13 +9,21 @@ Singleton {
     property int baseDensity: 96
 
     function dp(dp) {
-        if (dp == "full") {
-            return 99999999
-        }
-        return Math.round(dp * (Screen.pixelDensity * 25.4) / baseDensity)
+        return Math.round(dpReal(dp))
     }
 
     function pt(pt) {
-        return Math.round(pt * (Screen.pixelDensity * 25.4) / baseDensity)
+        return Math.round(ptReal(pt))
+    }
+
+    function dpReal(dp) {
+        if (dp == "full") {
+            return Infinity
+        }
+        return dp * (Screen.pixelDensity * 25.4) / baseDensity
+    }
+
+    function ptReal(pt) {
+        return pt * (Screen.pixelDensity * 25.4) / baseDensity
     }
 }

@@ -1,33 +1,46 @@
 import QtQuick
 import QtQuick.Effects
-import QtQuick.Controls
+import QtQuick.Controls.Basic
 
-Item {
+RadioButton {
     id: root
 
-    enum State {
-        Checked,
-        Indeterminat,
-        Unchecked
-    }
+    readonly property int borderSize: M3Size.dp(20) 
+    readonly property int stateLayerSize: M3Size.dp(40) 
 
-    property int state: M3Checkbox.State.Indeterminat
-    property bool error: false
-
-    property string icon: {
-        switch (state) {
-            case M3Checkbox.State.Checked: return "\ue5ca"
-            case M3Checkbox.State.Indeterminat: return "\uf88a"
-            default: return ""
-        }
-    }
-
-    FontLoader { id: materialSymbols; source: "/nix/store/qqdjqvd9lvnnyv9c1i7dxjpibggsj74j-material-symbols-4.0.0-unstable-2024-05-17/share/fonts/TTF/MaterialSymbolsOutlined.ttf" }
-
+    checkable: true
     implicitWidth: M3Size.dp(48)
     implicitHeight: M3Size.dp(48)
 
-    Rectangle {
+    padding: (this.implicitHeight - borderSize) / 2
+    leftInset: (this.implicitHeight - stateLayerSize) / 2
+    topInset: (this.implicitHeight - stateLayerSize) / 2
+    rightInset: (this.implicitHeight - stateLayerSize) / 2
+    bottomInset: (this.implicitHeight - stateLayerSize) / 2
+
+    indicator: Rectangle {
+        id: border
+        anchors.centerIn: parent
+        implicitWidth: M3Size.dp(20)
+        implicitHeight: M3Size.dp(20)
+
+        color: "transparent"
+        radius: M3Size.dp("full")
+        border.width: M3Size.dp(2)
+        border.color: root.checked ? M3Colors.getColor("primary") : M3Colors.getColor("onSurfaceVariant")
+
+        Rectangle {
+            id: circle
+            anchors.centerIn: parent
+            implicitWidth: M3Size.dp(10)
+            implicitHeight: M3Size.dp(10)
+
+            color: root.checked ? M3Colors.getColor("primary") : "transparent"
+            radius: M3Size.dp("full")
+        }
+    }
+
+    background: Rectangle {
         id: stateLayer
         state: "NOTHOVERED"
 
@@ -80,38 +93,6 @@ Item {
             hoverEnabled: true
             onEntered: { stateLayer.state = "HOVERED" }
             onExited: { stateLayer.state = "NOTHOVERED" }
-            onClicked: {
-                if (root.state == M3Checkbox.State.Unchecked || root.state == M3Checkbox.State.Indeterminat) {
-                    root.state = M3Checkbox.State.Checked
-                } else {
-                    root.state = M3Checkbox.State.Unchecked
-                }
-            }
-        }
-    }
-
-    Rectangle {
-        id: background
-
-        anchors.centerIn: parent
-        implicitWidth: M3Size.dp(18)
-        implicitHeight: M3Size.dp(18)
-
-        color: root.state == M3Checkbox.State.Unchecked ? "transparent" : (root.error ? M3Colors.getColor("error") : M3Colors.getColor("primary"))
-
-        radius: M3Size.dp(2)
-        border.width: M3Size.dp(2)
-        border.color: root.error ? M3Colors.getColor("error") : (root.state == M3Checkbox.State.Unchecked ? M3Colors.getColor("onSurface") : M3Colors.getColor("primary"))
-
-        Text {
-            id: icon
-
-            visible: root.state == M3Checkbox.State.Unchecked ? false : true
-            text: root.icon
-            anchors.centerIn: parent
-            color: root.error ? M3Colors.getColor("onError") : M3Colors.getColor("onPrimary")
-            font.family: materialSymbols.name
-            font.pixelSize: M3Size.dp(18)
         }
     }
 }

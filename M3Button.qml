@@ -88,22 +88,33 @@ Item {
     readonly property var styleConfig: ({
             "elevated": {
                 container: M3Colors.getColor("surfaceContainerLow"),
-                icon_and_label: M3Colors.getColor("primary")
+                icon_and_label: M3Colors.getColor("primary"),
+                hovered_state_layer: M3Colors.getColor("primary"),
+                hovered_icon_and_label: M3Colors.getColor("primary")
             },
             "filled": {
                 container: M3Colors.getColor("primary"),
-                icon_and_label: M3Colors.getColor("onPrimary")
+                icon_and_label: M3Colors.getColor("onPrimary"),
+                hovered_state_layer: M3Colors.getColor("onPrimary"),
+                hovered_icon_and_label: M3Colors.getColor("onPrimary")
             },
             "tonal": {
                 container: M3Colors.getColor("secondaryContainer"),
-                icon_and_label: M3Colors.getColor("onSecondaryContainer")
+                icon_and_label: M3Colors.getColor("onSecondaryContainer"),
+                hovered_state_layer: M3Colors.getColor("onSecondaryContainer"),
+                hovered_icon_and_label: M3Colors.getColor("onSecondaryContainer")
             },
             "outlined": {
                 container: M3Colors.getColor("outlineVariant"),
-                icon_and_label: M3Colors.getColor("onSurfaceVariant")
+                icon_and_label: M3Colors.getColor("onSurfaceVariant"),
+                hovered_state_layer: M3Colors.getColor("onSurfaceVariant"),
+                hovered_icon_and_label: M3Colors.getColor("onSurfaceVariant")
             },
             "text": {
-                icon_and_label: M3Colors.getColor("primary")
+                container: "transparent",
+                icon_and_label: M3Colors.getColor("primary"),
+                hovered_state_layer: M3Colors.getColor("primary"),
+                hovered_icon_and_label: M3Colors.getColor("primary")
             }
         })
 
@@ -112,6 +123,7 @@ Item {
 
         Rectangle {
             id: background
+            state: "NOTHOVERED"
             radius: root.radius
             implicitWidth: label.implicitWidth + (sizeToPixels(size).padding * 2)
             implicitHeight: sizeToPixels(size).height
@@ -120,6 +132,16 @@ Item {
             border.width: root.borderWidth
             border.color: root.borderColor
 
+            Rectangle {
+                id: stateLayer
+                anchors.fill: parent
+                radius: root.radius
+                opacity: 0
+                color: (() => {
+                    return root.styleConfig[root.typeToName(type)].hovered_state_layer;
+                })()
+            }
+
             Text {
                 id: label
                 anchors.centerIn: background
@@ -127,16 +149,60 @@ Item {
                 font.weight: Font.Medium
                 font.pixelSize: sizeToPixels(size).fontSize
                 color: (() => {
-                        return root.styleConfig[root.typeToName(type)].icon_and_label;
-                    })()
+                    return root.styleConfig[root.typeToName(type)].icon_and_label;
+                })()
             }
 
             MouseArea {
                 id: mouseArea
                 anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
                 hoverEnabled: true
+                onEntered: { background.state = "HOVERED" }
+                onExited: { background.state = "NOTHOVERED" }
                 onClicked: root.clicked()
             }
+
+            states: [
+                State {
+                    name: "HOVERED"
+                    PropertyChanges {
+                        target: stateLayer
+                        opacity: 0.08
+                    }
+                    PropertyChanges { target: label; color: (() => {
+                        return root.styleConfig[root.typeToName(type)].hovered_icon_and_label;
+                    })() }
+                },
+                State {
+                    name: "NOTHOVERED"
+                    PropertyChanges {
+                        target: stateLayer
+                        opacity: 0
+                    }
+                    PropertyChanges { target: label; color: (() => {
+                        return root.styleConfig[root.typeToName(type)].icon_and_label;
+                    })() }
+                }
+            ]
+
+            // TODO: Find exact transition values
+            transitions: [
+                Transition {
+                    from: "HOVERED"
+                    to: "NOTHOVERED"
+                    // easing-emphasized-accelerate
+                    OpacityAnimator { target: stateLayer; duration: 100; easing.type: Easing.Bezier; easing.bezierCurve: [0.3, 0, 0.8, 0.15] }
+                    ColorAnimation { target: label; duration: 100; easing.type: Easing.Bezier; easing.bezierCurve: [0.3, 0, 0.8, 0.15] }
+                },
+                Transition {
+                    from: "NOTHOVERED"
+                    to: "HOVERED"
+                    // easing-emphasized-decelerate
+                    OpacityAnimator { target: stateLayer; duration: 100; easing.type: Easing.Linear; easing.bezierCurve: [0.05, 0.7, 0.1, 1] }
+                    ColorAnimation { target: label; duration: 100; easing.type: Easing.Linear; easing.bezierCurve: [0.05, 0.7, 0.1, 1] }
+                }
+            ]
         }
     }
 }
