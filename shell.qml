@@ -88,34 +88,78 @@ Scope {
                 M3Checkbox { }
                 M3Checkbox { error: true }
             }
+            ColumnLayout {
+                Layout.alignment: Qt.AlignCenter
+                spacing: 40
+                RowLayout {
+                    Layout.alignment: Qt.AlignCenter
+
+                    Repeater {
+                        model: 5
+                        M3Slider {
+                            required property int index
+                            size: index
+                        }
+                    }
+                    M3Slider {
+                        from: 0
+                        to: 2
+                        snapMode: Slider.SnapOnRelease
+                        onValueChanged: {
+                            M3Colors.setContrast(this.value);
+                        }
+                        size: 3
+                    }
+                }
+                RowLayout {
+                    Repeater {
+                        model: 5
+                        M3RangeSlider {
+                            required property int index
+                            size: index
+                        }
+                    }
+                }
+            }
+
+            RowLayout {
+                M3Switch {
+                    onCheckedChanged: {
+                        M3Colors.setTheme(M3Colors.theme == 0 ? 1 : 0);
+                    }
+                }
+            }
 
             Item {
                 Layout.fillHeight: true
             }
+            AnimatedImage {
+                width: 130
+                height: 100
+                source: "https://media.tenor.com/vnPkxkdJPkAAAAAi/sylveon-cute.gif"
+            }
             Button {
                 text: "AAAAAA"
                 onClicked: {
-                    process.running = true;
+                    let p = "/home/user/Downloads/kremowka-papieska.jpg";
+                    // testProc.running = true;
+                    // wallpaperPathQuery.running = true;
+                    // M3Colors.loadColorsFromImage(p);
+
+                    M3Colors.test();
                     console.log("a");
                 }
+            }
+            Button {
+                text: "AAAAAA"
+                onClicked: {
+                    let p = "/home/user/Downloads/kremowka-papieska.jpg";
+                    // testProc.running = true;
+                    // wallpaperPathQuery.running = true;
+                    M3Colors.loadColorsFromImage(p);
 
-                Process {
-                    id: process
-                    command: [`./venv/bin/python`, `./generate_colors.py`, `/home/user/Downloads/Bloom-wallpaper-OLED.jpg`, `100`]
-                    running: false
-                    workingDirectory: Quickshell.shellDir
-                    onRunningChanged: {
-                        console.log("run");
-                    }
-                    stdout: StdioCollector {
-                        onStreamFinished: {
-                            M3Colors.a = JSON.parse(this.text);
-                            console.log(`line read: ${this.text}`);
-                        }
-                    }
-                    stderr: StdioCollector {
-                        onStreamFinished: console.log(`line read: ${this.text}`)
-                    }
+                    // M3Colors.test();
+                    console.log("a");
                 }
             }
         }

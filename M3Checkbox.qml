@@ -16,13 +16,16 @@ Item {
 
     property string icon: {
         switch (state) {
-            case M3Checkbox.State.Checked: return "\ue5ca"
-            case M3Checkbox.State.Indeterminat: return "\uf88a"
-            default: return ""
+        case M3Checkbox.State.Checked:
+            return "\ue5ca";
+        case M3Checkbox.State.Indeterminat:
+            return "\uf88a";
+        default:
+            return "";
         }
     }
 
-    FontLoader { id: materialSymbols; source: "/nix/store/qqdjqvd9lvnnyv9c1i7dxjpibggsj74j-material-symbols-4.0.0-unstable-2024-05-17/share/fonts/TTF/MaterialSymbolsOutlined.ttf" }
+    // FontLoader { id: materialSymbols; source: "/nix/store/qqdjqvd9lvnnyv9c1i7dxjpibggsj74j-material-symbols-4.0.0-unstable-2024-05-17/share/fonts/TTF/MaterialSymbolsOutlined.ttf" }
 
     implicitWidth: M3Size.dp(48)
     implicitHeight: M3Size.dp(48)
@@ -38,13 +41,12 @@ Item {
 
         color: {
             switch (root.state) {
-                case M3Checkbox.State.Checked:
-                case M3Checkbox.State.Indeterminat:
-                return root.error ? M3Colors.getColor("error") : M3Colors.getColor("primary")
-
-                case M3Checkbox.State.Unchecked:
-                default:
-                return M3Colors.getColor("onSurface")
+            case M3Checkbox.State.Checked:
+            case M3Checkbox.State.Indeterminat:
+                return root.error ? M3Colors.getColor("error") : M3Colors.getColor("primary");
+            case M3Checkbox.State.Unchecked:
+            default:
+                return M3Colors.getColor("onSurface");
             }
         }
 
@@ -52,16 +54,16 @@ Item {
             anchors.fill: parent
             hoverEnabled: true
             onEntered: {
-                stateLayer.opacity = 0.08
+                stateLayer.opacity = 0.08;
             }
             onExited: {
-                stateLayer.opacity = 0
+                stateLayer.opacity = 0;
             }
             onClicked: {
                 if (root.state == M3Checkbox.State.Unchecked) {
-                    root.state = M3Checkbox.State.Checked
+                    root.state = M3Checkbox.State.Checked;
                 } else {
-                    root.state = M3Checkbox.State.Unchecked
+                    root.state = M3Checkbox.State.Unchecked;
                 }
             }
         }
@@ -87,7 +89,7 @@ Item {
             text: root.icon
             anchors.centerIn: parent
             color: root.error ? M3Colors.getColor("onError") : M3Colors.getColor("onPrimary")
-            font.family: materialSymbols.name
+            // font.family: materialSymbols.name
             font.pixelSize: M3Size.dp(18)
         }
     }
