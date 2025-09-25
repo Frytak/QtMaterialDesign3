@@ -51,7 +51,7 @@ Scope {
                 Layout.alignment: Qt.AlignCenter
 
                 M3Button {
-                    type: M3Button.Style.Elevated
+                    style: M3Button.Style.Elevated
                     text: "Elevated"
                     onClicked: {
                         if (M3Colors.theme == M3Colors.Theme.Dark) {
@@ -63,23 +63,29 @@ Scope {
                 }
 
                 M3Button {
-                    type: M3Button.Style.Filled
+                    style: M3Button.Style.Filled
                     text: "Filled"
                 }
 
                 M3Button {
-                    type: M3Button.Style.Tonal
+                    style: M3Button.Style.Tonal
                     text: "Tonal"
                 }
 
                 M3Button {
-                    type: M3Button.Style.Outlined
+                    style: M3Button.Style.Outlined
                     text: "Outlined"
+                    onClicked: {
+                        tester.placeholderText = "Well fuck me"
+                    }
                 }
 
                 M3Button {
-                    type: M3Button.Style.Text
+                    style: M3Button.Style.Text
                     text: "Text"
+                    onClicked: {
+                        tester.placeholderText = "Well fuck me twice"
+                    }
                 }
             }
 
@@ -125,6 +131,7 @@ Scope {
             }
 
             RowLayout {
+                spacing: M3Size.dp(16)
                 Layout.alignment: Qt.AlignCenter
 
                 M3TextField {
@@ -133,16 +140,49 @@ Scope {
                 }
 
                 M3TextField {
+                    id: tester
                     placeholderText: "How..."
                 }
+
+                M3TextField { }
             }
 
             RowLayout {
                 Layout.alignment: Qt.AlignCenter
 
-                M3RadioButton { }
-                M3RadioButton { }
-                M3RadioButton { }
+                M3RadioButton {
+                    onHoveredChanged: if (this.hovered) {popup1.popup.open()} else {popup1.popup.close()}
+
+                    M3Tooltip {
+                        id: popup1
+                        anchors.left: parent.right
+                        text: "Here we have an example of a pretty long tooltip description that is totally pointless and doesn't explain anything, at least it test the component!"
+                    }
+                }
+                M3RadioButton {
+                    onHoveredChanged: if (this.hovered) {popup2.popup.open()} else {popup2.popup.close()}
+
+                    M3Tooltip {
+                        id: popup2
+                        anchors.left: parent.right
+                        text: "Short one ;3"
+                    }
+                }
+                M3RadioButton {
+                    onHoveredChanged: if (this.hovered || popup3.hoverHandler.hovered) {popup3.popup.open()} else {popup3.popup.close()}
+
+                    M3Tooltip {
+                        id: popup3
+                        anchors.left: parent.right
+                        style: M3Tooltip.Style.Rich
+
+                        header: "Rich tooltip"
+                        text: "Well, well, well, we were finally able to afford a rich tooltip. Looks pretty cozy!"
+                        loadButtonLeft: true
+
+                        hoverHandler.onHoveredChanged: if (parent.hovered || popup3.hoverHandler.hovered) {popup3.popup.open()} else {popup3.popup.close()}
+                    }
+                }
             }
 
             Item {
@@ -157,7 +197,7 @@ Scope {
                 M3Button {
                     Layout.alignment: Qt.AlignCenter
                     text: "Generate new theme"
-                    type: M3Button.Style.Tonal
+                    style: M3Button.Style.Tonal
 
                     onClicked: {
                         if (specifiedWallpaper.text == "") {

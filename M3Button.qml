@@ -76,7 +76,7 @@ Item {
         }
     }
 
-    property int type: M3Button.Style.Filled
+    property int style: M3Button.Style.Filled
     property int size: M3Button.Size.Medium
     property int shape: M3Button.Shape.Round
     property alias text: label.text
@@ -86,12 +86,12 @@ Item {
     implicitHeight: background.implicitHeight
 
     property double radius: shape == M3Button.Shape.Round ? M3Size.dp("full") : M3Size.dp(12)
-    property color backgroundColor: type == M3Button.Style.Outlined || type == M3Button.Style.Text ? "transparent" : (() => {
-            return root.styleConfig[root.typeToName(type)].container;
+    property color backgroundColor: style == M3Button.Style.Outlined || style == M3Button.Style.Text ? "transparent" : (() => {
+            return root.styleConfig[root.typeToName(style)].container;
         })()
-    property double borderWidth: type == M3Button.Style.Outlined ? M3Size.dp(1) : 0
-    property color borderColor: type == M3Button.Style.Outlined ? (() => {
-            return root.styleConfig[root.typeToName(type)].container;
+    property double borderWidth: style == M3Button.Style.Outlined ? M3Size.dp(1) : 0
+    property color borderColor: style == M3Button.Style.Outlined ? (() => {
+            return root.styleConfig[root.typeToName(style)].container;
         })() : "transparent"
 
     readonly property var styleConfig: ({
@@ -128,7 +128,7 @@ Item {
         })
 
     Elevation {
-        level: root.type == M3Button.Style.Elevated ? Elevation.Level.One : Elevation.Level.Zero
+        level: root.style == M3Button.Style.Elevated ? Elevation.Level.One : Elevation.Level.Zero
 
         Rectangle {
             id: background
@@ -147,7 +147,7 @@ Item {
                 radius: root.radius
                 opacity: 0
                 color: (() => {
-                    return root.styleConfig[root.typeToName(type)].hovered_state_layer;
+                    return root.styleConfig[root.typeToName(style)].hovered_state_layer;
                 })()
             }
 
@@ -158,7 +158,7 @@ Item {
                 font.weight: Font.Medium
                 font.pixelSize: sizeToPixels(size).fontSize
                 color: (() => {
-                    return root.styleConfig[root.typeToName(type)].icon_and_label;
+                    return root.styleConfig[root.typeToName(style)].icon_and_label;
                 })()
             }
 
@@ -180,7 +180,7 @@ Item {
                         opacity: 0.08
                     }
                     PropertyChanges { target: label; color: (() => {
-                        return root.styleConfig[root.typeToName(type)].hovered_icon_and_label;
+                        return root.styleConfig[root.typeToName(style)].hovered_icon_and_label;
                     })() }
                 },
                 State {
@@ -190,7 +190,7 @@ Item {
                         opacity: 0
                     }
                     PropertyChanges { target: label; color: (() => {
-                        return root.styleConfig[root.typeToName(type)].icon_and_label;
+                        return root.styleConfig[root.typeToName(style)].icon_and_label;
                     })() }
                 }
             ]

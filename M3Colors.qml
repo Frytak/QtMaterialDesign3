@@ -131,4 +131,62 @@ Singleton {
             onStreamFinished: console.log(`line read: ${this.text}`)
         }
     }
+
+    property color primary_paletteKeyColor
+    property color secondary_paletteKeyColor
+    property color tertiary_paletteKeyColor
+    property color neutral_paletteKeyColor
+    property color neutral_variant_paletteKeyColor
+    property color background
+    property color onBackground
+    property color surface
+    property color surfaceDim
+    property color surfaceBright
+    property color surfaceContainerLowest
+    property color surfaceContainerLow
+    property color surfaceContainer
+    property color surfaceContainerHigh
+    property color surfaceContainerHighest
+    property color onSurface
+    property color surfaceVariant
+    property color onSurfaceVariant
+    property color inverseSurface
+    property color inverseOnSurface
+    property color outline
+    property color outlineVariant
+    property color shadow
+    property color scrim
+    property color surfaceTint
+    property color primary
+    property color onPrimary
+
+    Component.onCompleted: {
+        primary_paletteKeyColor = Qt.binding(() => getColor("primary_paletteKeyColor"))
+        secondary_paletteKeyColor = Qt.binding(() => getColor("secondary_paletteKeyColor"))
+        tertiary_paletteKeyColor = Qt.binding(() => getColor("tertiary_paletteKeyColor"))
+        neutral_paletteKeyColor = Qt.binding(() => getColor("neutral_paletteKeyColor"))
+        neutral_variant_paletteKeyColor = Qt.binding(() => getColor("neutral_variant_paletteKeyColor"))
+        background = Qt.binding(() => getColor("background"))
+        onBackground = Qt.binding(() => getColor("onBackground"))
+        surface = Qt.binding(() => getColor("surface"))
+        surfaceDim = Qt.binding(() => getColor("surfaceDim"))
+        surfaceBright = Qt.binding(() => getColor("surfaceBright"))
+        surfaceContainerLowest = Qt.binding(() => getColor("surfaceContainerLowest"))
+        surfaceContainerLow = Qt.binding(() => getColor("surfaceContainerLow"))
+        surfaceContainer = Qt.binding(() => getColor("surfaceContainer"))
+        surfaceContainerHigh = Qt.binding(() => getColor("surfaceContainerHigh"))
+        surfaceContainerHighest = Qt.binding(() => getColor("surfaceContainerHighest"))
+        onSurface = Qt.binding(() => getColor("onSurface"))
+        surfaceVariant = Qt.binding(() => getColor("surfaceVariant"))
+        onSurfaceVariant = Qt.binding(() => getColor("onSurfaceVariant"))
+        inverseSurface = Qt.binding(() => getColor("inverseSurface"))
+        inverseOnSurface = Qt.binding(() => getColor("inverseOnSurface"))
+        outline = Qt.binding(() => getColor("outline"))
+        outlineVariant = Qt.binding(() => getColor("outlineVariant"))
+        shadow = Qt.binding(() => getColor("shadow"))
+        scrim = Qt.binding(() => getColor("scrim"))
+        surfaceTint = Qt.binding(() => getColor("surfaceTint"))
+        primary = Qt.binding(() => getColor("primary"))
+        onPrimary = Qt.binding(() => getColor("onPrimary"))
+    }
 }
